@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import com.frey.msu.geoquiz.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
+import android.content.Intent
 
 private const val TAG = "MainActivity"
 
@@ -40,6 +41,12 @@ class MainActivity : AppCompatActivity() {
             binding.falseButton.isEnabled = !(binding.falseButton.isEnabled)
             binding.trueButton.isEnabled = !(binding.trueButton.isEnabled)
             computeScore()
+        }
+
+        binding.cheatButton.setOnClickListener {
+            // Start CheatActivity
+            val intent = Intent(this, CheatActivity::class.java)
+            startActivity(intent)
         }
 
         binding.nextButton.setOnClickListener {
