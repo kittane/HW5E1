@@ -8,6 +8,7 @@ private const val TAG = "QuizViewModel"
 const val CURRENT_INDEX_KEY = "CURRENT_INDEX_KEY"
 const val NUMBER_CORRECT_KEY = "NUMBER_CORRECT_KEY"
 const val USER_SCORE_KEY = "USER_SCORE_KEY"
+const val IS_CHEATER_KEY = "IS_CHEATER_KEY"
 
 class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
@@ -19,6 +20,11 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         Question(R.string.question_americas, true),
         Question(R.string.question_asia, true)
     )
+
+    var isCheater: Boolean
+        get() = savedStateHandle.get(IS_CHEATER_KEY) ?: false
+        set(value) = savedStateHandle.set(IS_CHEATER_KEY, value)
+
 
     // These variables have been switched to public variables for the purposes of ensuring score calculation can occur in MainActivity.
     // TO-DO for future builds -- implement getters and setters
