@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.frey.msu.geoquiz.databinding.ActivityCheatBinding
+import androidx.activity.viewModels
 
 private const val EXTRA_ANSWER_IS_TRUE =
     "com.frey.msu.geoquiz.answer_is_true"
@@ -19,6 +20,8 @@ class CheatActivity : AppCompatActivity() {
 
     private var answerIsTrue = false
 
+    private val CheatViewModel: CheatViewModel by viewModels ()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCheatBinding.inflate(layoutInflater)
@@ -26,7 +29,7 @@ class CheatActivity : AppCompatActivity() {
 
         answerIsTrue = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
 
-        binding.showAnswerButton.setOnClickListener {
+        if (CheatViewModel.answerShown) {
             val answerText = when {
                 answerIsTrue -> R.string.true_button
                 else -> R.string.false_button
@@ -34,6 +37,17 @@ class CheatActivity : AppCompatActivity() {
             binding.answerTextView.setText(answerText)
             setAnswerShownResult(true)
         }
+
+        binding.showAnswerButton.setOnClickListener {
+            val answerText = when {
+                answerIsTrue -> R.string.true_button
+                else -> R.string.false_button
+            }
+            binding.answerTextView.setText(answerText)
+            CheatViewModel.answerShown = true
+            setAnswerShownResult(true)
+        }
+
     }
 
     private fun setAnswerShownResult(isAnswerShown: Boolean) {
