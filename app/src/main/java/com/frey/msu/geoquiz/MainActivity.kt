@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val quizViewModel: QuizViewModel by viewModels()
+    private val cheatViewModel: CheatViewModel by viewModels()
 
     private val cheatLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()

@@ -21,6 +21,7 @@ class CheatActivity : AppCompatActivity() {
     private var answerIsTrue = false
 
     private val CheatViewModel: CheatViewModel by viewModels ()
+    private val quizViewModel: QuizViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
