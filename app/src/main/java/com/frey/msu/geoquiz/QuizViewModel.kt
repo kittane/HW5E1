@@ -21,8 +21,8 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         Question(R.string.question_asia, true)
     )
 
-    var isCheater: Boolean
-        get() = savedStateHandle.get(IS_CHEATER_KEY) ?: false
+    var isCheater: List<Boolean>
+        get() = savedStateHandle.get<List<Boolean>>(IS_CHEATER_KEY) ?: List(questionBank.size) { false }
         set(value) = savedStateHandle.set(IS_CHEATER_KEY, value)
 
 
@@ -55,6 +55,18 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
 
     fun correctAnswer() {
         numberCorrect++
+    }
+
+    fun isCurrentQuestionCheated(): Boolean {
+        Log.d(TAG, "Checking if current question is cheated.")
+        val isCheaterList = savedStateHandle.get<List<Boolean>>(IS_CHEATER_KEY)
+        return isCheaterList?.get(currentIndex) ?: false
+    }
+
+    fun setCheatingStatus(isCheater: Boolean) {
+        val currentList = (savedStateHandle.get<List<Boolean>>(IS_CHEATER_KEY) ?: List(questionBank.size) { false }).toMutableList()
+        currentList[currentIndex] = isCheater
+        savedStateHandle.set(IS_CHEATER_KEY, currentList)
     }
 
 }

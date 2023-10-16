@@ -21,16 +21,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val quizViewModel: QuizViewModel by viewModels()
-    private val cheatViewModel: CheatViewModel by viewModels()
+    private val quizViewModel: QuizViewModel by viewModels ()
+    private val cheatViewModel: CheatViewModel by viewModels ()
 
-    private val cheatLauncher = registerForActivityResult(
+    private val cheatActivityLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        // Handle the result
         if (result.resultCode == Activity.RESULT_OK) {
-            quizViewModel.isCheater =
-                result.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?:false
+            val isCheater = result.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+            quizViewModel.setCheatingStatus(isCheater)
         }
     }
 
@@ -57,10 +56,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.cheatButton.setOnClickListener {
-            // Start CheatActivity
             val answerIsTrue = quizViewModel.currentQuestionAnswer
-            val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
-            cheatLauncher.launch(intent)
+            val intent = CheatActivity.newIntent(this, answerIsTrue)
+            cheatActivityLauncher.launch(intent)
         }
 
         binding.nextButton.setOnClickListener {
@@ -121,15 +119,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkAnswer(userAnswer: Boolean) {
         val correctAnswer = quizViewModel.currentQuestionAnswer
-//        val messageResId = if (userAnswer == correctAnswer) {
-//            quizViewModel.numberCorrect++
-//            R.string.correct_toast
-//        } else {
-//            R.string.incorrect_toast
-//        }
+
         val messageResId = when {
-            quizViewModel.isCheater -> R.string.judgement_toast
-            userAnswer == correctAnswer -> R.string.correct_toast
+            quizViewModel.isCurrentQuestionCheated() -> R.string.judgement_toast
+            userAnswer == correctAnswer -> {
+                quizViewModel.numberCorrect++  // Increment the correct answer count
+                R.string.correct_toast
+            }
             else -> R.string.incorrect_toast
         }
 

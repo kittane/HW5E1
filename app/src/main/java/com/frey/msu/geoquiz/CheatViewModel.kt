@@ -12,8 +12,6 @@ class CheatViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel
 
     var answerShown: Boolean
         get() = savedStateHandle.get(ANSWER_SHOWN_KEY) ?: false
-        set(value) {
-            savedStateHandle.set(ANSWER_SHOWN_KEY, value)
-        }
+        set(value) = savedStateHandle.set(ANSWER_SHOWN_KEY, value)
 
 }
